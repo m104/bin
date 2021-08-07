@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "restarting TouchBar..."
+sudo pkill TouchBarServer
+sudo killall ControlStrip
+
+echo "Done"
