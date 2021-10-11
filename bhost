@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Look up IPv4+6 addresses for a given bonjour hostname
+#
+# bhost mydevice
+
+timeout 2 dns-sd -Gv4v6 "$1".local
