@@ -1,7 +1,7 @@
 #!/bin/sh
 
 hostname="google.com"
-interval_seconds=10
+interval_seconds=2
 timeout_seconds=1
 
 date_format="+%Y-%m-%d %H:%M:%S %Z"
@@ -12,6 +12,8 @@ clear="\033[0m"
 echo "Hostname: $hostname"
 echo "Interval: ${interval_seconds}s"
 echo "Timeout: ${timeout_seconds}s"
+
+trap "true" SIGALRM
 
 while true; do
   line="->$hostname `date \"$date_format\"`"
