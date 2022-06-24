@@ -1,0 +1,15 @@
+#!/bin/sh
+
+hostname="google.com"
+interval_seconds=10
+date_format="+%Y-%m-%d %H:%M:%S %Z"
+
+echo "Hostname: $hostname"
+echo "Interval: $interval_seconds sec"
+
+while true; do
+  ping -t 1 -qo "$hostname" &>/dev/null \
+    && echo "OK   [$hostname] `date \"$date_format\"`" \
+    || echo "FAIL [$hostname] `date \"$date_format\"`"
+  sleep $interval_seconds
+done
