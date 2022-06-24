@@ -2,14 +2,23 @@
 
 hostname="google.com"
 interval_seconds=10
+timeout_seconds=1
+
 date_format="+%Y-%m-%d %H:%M:%S %Z"
+red="\033[1;31m"
+green="\033[1;32m"
+clear="\033[0m"
 
 echo "Hostname: $hostname"
-echo "Interval: $interval_seconds sec"
+echo "Interval: ${interval_seconds}s"
+echo "Timeout: ${timeout_seconds}s"
 
 while true; do
-  ping -t 1 -qo "$hostname" &>/dev/null \
-    && echo "OK   [$hostname] `date \"$date_format\"`" \
-    || echo "FAIL [$hostname] `date \"$date_format\"`"
+  line="->$hostname `date \"$date_format\"`"
+  ping -t $timeout_seconds -qo "$hostname" &>/dev/null \
+    && echo "${green}pass${clear} $line" \
+    || echo "${red}FAIL${clear} $line"
   sleep $interval_seconds
 done
+
+
