@@ -4,30 +4,25 @@ YELLOW='\033[1;33m'
 GREEN='\033[1;32m'
 CLEAR='\033[00m'
 
-MAIN_BRANCH=main
+TRUNK_BRANCH=master
 
 echo -e "${YELLOW}Fetching latest${CLEAR}"
 git fetch
 
-echo -e "${YELLOW}Resetting $MAIN_BRANCH${CLEAR}"
-git checkout $MAIN_BRANCH > /dev/null
-git reset --hard origin/$MAIN_BRANCH
-
-if git branch | egrep '^. develop$' >/dev/null; then
-  echo -e "${YELLOW}Resetting develop${CLEAR}"
-  git checkout develop > /dev/null
-  git reset --hard origin/develop
-fi
+echo -e "${YELLOW}Resetting $TRUNK_BRANCH${CLEAR}"
+git checkout $TRUNK_BRANCH > /dev/null
+git reset --hard origin/$TRUNK_BRANCH
 
 echo -e "${YELLOW}Clearing stash${CLEAR}"
 git stash clear
 
 echo -e "${YELLOW}Pruning removed branches${CLEAR}"
-git remote prune origin
+#git remote prune origin
+git fetch --prune
 
 echo -e "${YELLOW}Pruning merged branches${CLEAR}"
-git branch --merged origin/$MAIN_BRANCH \
-  | egrep -v "^. (develop|staging|$MAIN_BRANCH)$" \
+git branch --merged origin/$TRUNK_BRANCH \
+  | egrep -v "^. (staging|$TRUNK_BRANCH)$" \
   | xargs -n 1 git branch -v -d
 
 echo -e "${YELLOW}Pruning unused commits${CLEAR}"
@@ -35,11 +30,6 @@ git prune
 
 echo -e "${YELLOW}GC${CLEAR}"
 git gc
-
-if [ -d log ]; then
-  echo -e "${YELLOW}Clearing logs${CLEAR}"
-  rm -fv log/*.log
-fi
 
 echo ""
 echo -e "${GREEN}All clean :)${CLEAR}"
