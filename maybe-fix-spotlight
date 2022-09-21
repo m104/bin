@@ -1,0 +1,10 @@
+#!/bin/sh
+
+sudo mdutil -a -i off /
+sudo killall -KILL Spotlight spotlightd mds
+sudo rm -rfv ~/Library/Metadata/CoreSpotlight/
+sudo rm -rfv /System/Volumes/Data/.Spotlight-V100
+sudo mdutil -a -i on / # required?
+sudo mdutil -E -i on /
+
+echo "Restart the machine!"
