@@ -13,10 +13,10 @@ echo -e "${YELLOW}Resetting $TRUNK_BRANCH${CLEAR}"
 git checkout $TRUNK_BRANCH > /dev/null
 git reset --hard origin/$TRUNK_BRANCH
 
-echo -e "${YELLOW}Clearing stash${CLEAR}"
-git stash clear
+# echo -e "${YELLOW}Clearing stash${CLEAR}"
+# git stash clear
 
-echo -e "${YELLOW}Pruning removed branches${CLEAR}"
+echo -e "${YELLOW}Pruning removed remote branches${CLEAR}"
 #git remote prune origin
 git fetch --prune
 
@@ -24,6 +24,11 @@ echo -e "${YELLOW}Pruning merged branches${CLEAR}"
 git branch --merged origin/$TRUNK_BRANCH \
   | egrep -v "^. (staging|$TRUNK_BRANCH)$" \
   | xargs -n 1 git branch -v -d
+
+echo -e "${YELLOW}Pruning branching with deleted upstreams${CLEAR}"
+git for-each-ref --format '%(refname:short) %(upstream:track)' \
+  | awk '$2 == "[gone]" {print $1}' \
+  | xargs -r git branch -D
 
 echo -e "${YELLOW}Pruning unused commits${CLEAR}"
 git prune
