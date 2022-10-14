@@ -1,10 +1,9 @@
 #!/usr/bin/env sh
 
 find . -type f \
-  # extract the ".extension"
   | sed -e 's/.*\(\.[^\/]*\)$/\1/' \
-  # remove lines that matches the whole path
   | sed -e '/^\.\//d' \
   | sort \
   | uniq -c \
   | sort -n
+
