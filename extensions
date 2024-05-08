@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-find . -type f \
+(git ls-files 2>/dev/null || find . -type f) \
   | sed -e 's/.*\(\.[^\/]*\)$/\1/' \
   | sed -e '/^\.\//d' \
   | sort \
